@@ -3,50 +3,189 @@
 {% block title %}Share Your Feelings - TherapyHub{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0"><i class="fas fa-pen"></i> Share Your Feelings</h4>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Page Header -->
+            <div class="text-center mb-5">
+                <h1 class="display-6 fw-semibold text-gray-900 mb-3">
+                    Share Your Feelings
+                </h1>
+                <p class="text-gray-600 fs-5">
+                    Express yourself in a safe, supportive environment
+                </p>
             </div>
-            <div class="card-body">
-                <p class="text-muted">This is a safe space to express how you're feeling. Your post will be analyzed for emotional content and you may receive helpful resources.</p>
+
+            <!-- Main Form Card -->
+            <div class="feature-card mb-5">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="icon-circle bg-purple-100 text-purple-600 me-3">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-semibold text-gray-900 mb-1">{{ current_user.anonymous_name }}</h6>
+                        <p class="text-gray-500 mb-0 fs-sm">Anonymous Post</p>
+                    </div>
+                </div>
                 
                 <form method="POST">
                     {{ form.hidden_tag() }}
                     
-                    <div class="mb-3">
-                        {{ form.content.label(class="form-label") }}
-                        {{ form.content(class="form-control") }}
+                    <div class="mb-5">
+                        {{ form.content.label(class="form-label fw-semibold text-gray-800 mb-3") }}
+                        {{ form.content(class="apple-input", placeholder="What's on your mind? Share your thoughts, feelings, or what you're going through...", rows="6", style="min-height: 150px;") }}
                         {% if form.content.errors %}
-                        <div class="text-danger">
+                        <div class="text-danger mt-2">
                             {% for error in form.content.errors %}
-                            <small>{{ error }}</small>
+                            <small class="d-flex align-items-center">
+                                <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
+                            </small>
                             {% endfor %}
                         </div>
                         {% endif %}
-                        <small class="form-text text-muted">Share what's on your mind. Be as detailed as you'd like - this community is here to support you.</small>
+                        <p class="text-gray-500 mt-3 fs-sm d-flex align-items-center">
+                            <i class="fas fa-heart text-red-500 me-2"></i>
+                            Your post will be analyzed by AI to provide personalized support and resources.
+                        </p>
                     </div>
 
-                    <div class="d-flex justify-content-between">
-                        <a href="{{ url_for('posts') }}" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left"></i> Back to Feed
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{{ url_for('posts') }}" class="btn-clean">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Feed
                         </a>
-                        {{ form.submit(class="btn btn-primary") }}
+                        <div class="d-flex gap-3">
+                            <button type="button" class="cta-button secondary" onclick="document.getElementById('content').value = '';">
+                                <i class="fas fa-eraser me-2"></i>Clear
+                            </button>
+                            {{ form.submit(class="cta-button primary") }}
+                        </div>
                     </div>
                 </form>
             </div>
-        </div>
 
-        <div class="alert alert-info mt-3" role="alert">
-            <h6 class="alert-heading"><i class="fas fa-lightbulb"></i> Tips for Sharing</h6>
-            <ul class="mb-0">
-                <li>Be honest about your feelings - this helps others understand how to support you</li>
-                <li>Include context about what's affecting you</li>
-                <li>Remember that others have similar experiences</li>
-                <li>Be respectful and avoid harmful language</li>
-            </ul>
+            <!-- Features Info -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <div class="feature-card text-center h-100">
+                        <div class="icon-circle bg-green-100 text-green-600 mx-auto mb-3">
+                            <i class="fas fa-shield-alt fa-lg"></i>
+                        </div>
+                        <h6 class="fw-semibold text-gray-900 mb-2">AI Safety</h6>
+                        <p class="text-gray-600 mb-0 fs-sm">Automatic content moderation for community safety</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card text-center h-100">
+                        <div class="icon-circle bg-yellow-100 text-yellow-600 mx-auto mb-3">
+                            <i class="fas fa-lightbulb fa-lg"></i>
+                        </div>
+                        <h6 class="fw-semibold text-gray-900 mb-2">Smart Resources</h6>
+                        <p class="text-gray-600 mb-0 fs-sm">Personalized coping strategies based on your emotions</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card text-center h-100">
+                        <div class="icon-circle bg-blue-100 text-blue-600 mx-auto mb-3">
+                            <i class="fas fa-users fa-lg"></i>
+                        </div>
+                        <h6 class="fw-semibold text-gray-900 mb-2">Peer Support</h6>
+                        <p class="text-gray-600 mb-0 fs-sm">Community members ready to listen and help</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guidelines -->
+            <div class="feature-card mb-5">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="icon-circle bg-blue-100 text-blue-600 me-3">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <h5 class="fw-semibold text-gray-900 mb-0">Community Guidelines</h5>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="fw-semibold text-green-700 mb-3 d-flex align-items-center">
+                            <i class="fas fa-check-circle me-2"></i>Encouraged:
+                        </h6>
+                        <ul class="list-unstyled space-y-2">
+                            <li class="d-flex align-items-start mb-2">
+                                <i class="fas fa-heart text-green-600 me-3 mt-1"></i>
+                                <span class="text-gray-700">Be honest about your feelings</span>
+                            </li>
+                            <li class="d-flex align-items-start mb-2">
+                                <i class="fas fa-handshake text-green-600 me-3 mt-1"></i>
+                                <span class="text-gray-700">Share your experiences</span>
+                            </li>
+                            <li class="d-flex align-items-start mb-2">
+                                <i class="fas fa-question-circle text-green-600 me-3 mt-1"></i>
+                                <span class="text-gray-700">Ask for support or advice</span>
+                            </li>
+                            <li class="d-flex align-items-start mb-2">
+                                <i class="fas fa-smile text-green-600 me-3 mt-1"></i>
+                                <span class="text-gray-700">Express gratitude</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-semibold text-red-600 mb-3 d-flex align-items-center">
+                            <i class="fas fa-times-circle me-2"></i>Please Avoid:
+                        </h6>
+                        <ul class="list-unstyled space-y-2">
+                            <li class="d-flex align-items-start mb-2">
+                                <i class="fas fa-ban text-red-600 me-3 mt-1"></i>
+                                <span class="text-gray-700">Harmful or offensive language</span>
+                            </li>
+                            <li class="d-flex align-items-start mb-2">
+                                <i class="fas fa-user-slash text-red-600 me-3 mt-1"></i>
+                                <span class="text-gray-700">Personal attacks or judgment</span>
+                            </li>
+                            <li class="d-flex align-items-start mb-2">
+                                <i class="fas fa-exclamation-triangle text-red-600 me-3 mt-1"></i>
+                                <span class="text-gray-700">Crisis content (use emergency services)</span>
+                            </li>
+                            <li class="d-flex align-items-start mb-2">
+                                <i class="fas fa-eye-slash text-red-600 me-3 mt-1"></i>
+                                <span class="text-gray-700">Sharing personal information</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emergency Notice -->
+            <div class="p-4 bg-yellow-50 rounded-3 border border-yellow-200">
+                <div class="d-flex align-items-start">
+                    <div class="flex-shrink-0 me-3">
+                        <div class="icon-circle bg-yellow-100 text-yellow-600">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h6 class="fw-semibold text-yellow-900 mb-2">Crisis Support</h6>
+                        <p class="text-yellow-800 mb-3">If you're experiencing a mental health emergency, please reach out for immediate help:</p>
+                        <div class="d-flex flex-wrap gap-4">
+                            <span class="fw-semibold text-yellow-900"><strong>Emergency:</strong> 911</span>
+                            <span class="fw-semibold text-yellow-900"><strong>Crisis Text:</strong> Text HOME to 741741</span>
+                            <span class="fw-semibold text-yellow-900"><strong>Suicide Prevention:</strong> 988</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+<script>
+// Auto-resize textarea
+document.addEventListener('DOMContentLoaded', function() {
+    const textarea = document.getElementById('content');
+    if (textarea) {
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+    }
+});
+</script>
 {% endblock %}

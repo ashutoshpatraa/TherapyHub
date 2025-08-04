@@ -1,69 +1,197 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row">
-    <div class="col-lg-8 mx-auto">
-        <div class="jumbotron bg-primary text-white p-5 rounded mb-4">
-            <h1 class="display-4"><i class="fas fa-heart"></i> Welcome to TherapyHub</h1>
-            <p class="lead">A safe, anonymous space for peer mental health support</p>
-            <hr class="my-4">
-            <p>Share your feelings, connect with others, and find support in our caring community.</p>
-            {% if not current_user.is_authenticated %}
-            <a class="btn btn-light btn-lg me-2" href="{{ url_for('register') }}" role="button">
-                <i class="fas fa-user-plus"></i> Join Community
-            </a>
-            <a class="btn btn-outline-light btn-lg" href="{{ url_for('posts') }}" role="button">
-                <i class="fas fa-eye"></i> Browse Posts
-            </a>
-            {% else %}
-            <a class="btn btn-light btn-lg me-2" href="{{ url_for('create_post') }}" role="button">
-                <i class="fas fa-pen"></i> Share Your Feelings
-            </a>
-            <a class="btn btn-outline-light btn-lg" href="{{ url_for('posts') }}" role="button">
-                <i class="fas fa-comments"></i> Community Feed
-            </a>
-            {% endif %}
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <i class="fas fa-user-secret fa-3x text-primary mb-3"></i>
-                        <h5 class="card-title">Anonymous Support</h5>
-                        <p class="card-text">Share your thoughts and feelings anonymously in a judgment-free environment.</p>
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="text-center">
+            <!-- Main heading -->
+            <h1 class="hero-title animate-fade-in">
+                Welcome to TherapyHub
+            </h1>
+            
+            <!-- Subtitle -->
+            <p class="hero-subtitle animate-fade-in animate-delay-1">
+                A safe, anonymous space where your mental health matters. 
+                Share your feelings, find support, and discover you're never alone in your journey.
+            </p>
+            
+            <!-- CTA Cards -->
+            <div class="hero-cta animate-fade-in animate-delay-2">
+                {% if not current_user.is_authenticated %}
+                    <!-- Join Community Card -->
+                    <a href="{{ url_for('register') }}" class="cta-card cta-card-primary">
+                        <div class="cta-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h3 class="cta-title">Join Our Community</h3>
+                        <p class="cta-description">100% anonymous & free</p>
+                    </a>
+                    
+                    <!-- Explore Posts Card -->
+                    <a href="{{ url_for('posts') }}" class="cta-card">
+                        <div class="cta-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <h3 class="cta-title">Explore Posts</h3>
+                        <p class="cta-description">See how others share</p>
+                    </a>
+                {% else %}
+                    <!-- Share Feelings Card -->
+                    <a href="{{ url_for('create_post') }}" class="cta-card cta-card-primary">
+                        <div class="cta-icon">
+                            <i class="fas fa-pen"></i>
+                        </div>
+                        <h3 class="cta-title">Share Your Feelings</h3>
+                        <p class="cta-description">Your voice matters here</p>
+                    </a>
+                    
+                    <!-- Support Others Card -->
+                    <a href="{{ url_for('posts') }}" class="cta-card">
+                        <div class="cta-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="cta-title">Support Others</h3>
+                        <p class="cta-description">Be someone's light today</p>
+                    </a>
+                {% endif %}
+            </div>
+            
+            <!-- Feature Icons -->
+            <div class="feature-icons animate-fade-in animate-delay-3">
+                <div class="feature-icon">
+                    <div class="feature-icon-symbol">
+                        <i class="fas fa-shield-alt"></i>
                     </div>
+                    <div class="feature-icon-text">AI-Protected</div>
+                </div>
+                
+                <div class="feature-icon">
+                    <div class="feature-icon-symbol">
+                        <i class="fas fa-user-secret"></i>
+                    </div>
+                    <div class="feature-icon-text">Anonymous</div>
+                </div>
+                
+                <div class="feature-icon">
+                    <div class="feature-icon-symbol">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="feature-icon-text">24/7 Available</div>
+                </div>
+                
+                <div class="feature-icon">
+                    <div class="feature-icon-symbol">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="feature-icon-text">Dark Mode</div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <i class="fas fa-brain fa-3x text-success mb-3"></i>
-                        <h5 class="card-title">AI-Powered Safety</h5>
-                        <p class="card-text">Our system uses sentiment analysis to detect and filter harmful content automatically.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <i class="fas fa-lightbulb fa-3x text-warning mb-3"></i>
-                        <h5 class="card-title">Helpful Resources</h5>
-                        <p class="card-text">Get personalized coping strategies and calming techniques based on your emotions.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="alert alert-warning mt-4" role="alert">
-            <h5 class="alert-heading"><i class="fas fa-exclamation-triangle"></i> Important Notice</h5>
-            <p>TherapyHub provides peer support and is not a substitute for professional mental health care. If you're experiencing a mental health emergency, please contact:</p>
-            <ul class="mb-0">
-                <li><strong>Emergency Services:</strong> 911 (US) or your local emergency number</li>
-                <li><strong>Crisis Text Line:</strong> Text HOME to 741741</li>
-                <li><strong>National Suicide Prevention Lifeline:</strong> 988</li>
-            </ul>
         </div>
     </div>
-</div>
+</section>
+
+<!-- Additional content sections -->
+<section class="py-5" style="background: var(--white);">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Feature 1 -->
+            <div class="col-md-4">
+                <div class="text-center p-4">
+                    <div class="feature-icon-symbol mx-auto mb-3" style="width: 64px; height: 64px; font-size: 1.5rem;">
+                        <i class="fas fa-user-secret"></i>
+                    </div>
+                    <h5 class="fw-semibold mb-3" style="color: var(--gray-900);">
+                        Complete Anonymity
+                    </h5>
+                    <p style="color: var(--gray-600); line-height: 1.6;">
+                        Share your thoughts without fear. No personal information required - just your authentic self.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Feature 2 -->
+            <div class="col-md-4">
+                <div class="text-center p-4">
+                    <div class="feature-icon-symbol mx-auto mb-3" style="width: 64px; height: 64px; font-size: 1.5rem;">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h5 class="fw-semibold mb-3" style="color: var(--gray-900);">
+                        AI-Powered Safety
+                    </h5>
+                    <p style="color: var(--gray-600); line-height: 1.6;">
+                        Advanced AI monitors content to ensure a safe, supportive environment for everyone.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Feature 3 -->
+            <div class="col-md-4">
+                <div class="text-center p-4">
+                    <div class="feature-icon-symbol mx-auto mb-3" style="width: 64px; height: 64px; font-size: 1.5rem;">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h5 class="fw-semibold mb-3" style="color: var(--gray-900);">
+                        Genuine Support
+                    </h5>
+                    <p style="color: var(--gray-600); line-height: 1.6;">
+                        Connect with others who understand. Real people, real support, real healing.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Emergency Resources -->
+<section class="py-5" style="background: var(--gray-50);">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold mb-3" style="color: var(--gray-900);">
+                Need Immediate Help?
+            </h2>
+            <p class="fs-5" style="color: var(--gray-600);">
+                If you're in crisis, these resources are available 24/7
+            </p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="text-center p-4" style="background: white; border-radius: var(--radius-xl); box-shadow: var(--shadow); border: 1px solid var(--gray-200);">
+                    <div class="mb-3" style="color: var(--success); font-size: 2rem;">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <h5 class="fw-semibold mb-2">Crisis Hotline</h5>
+                    <p class="fs-4 fw-bold mb-1" style="color: var(--success);">988</p>
+                    <small style="color: var(--gray-600);">Suicide & Crisis Lifeline</small>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="text-center p-4" style="background: white; border-radius: var(--radius-xl); box-shadow: var(--shadow); border: 1px solid var(--gray-200);">
+                    <div class="mb-3" style="color: var(--primary); font-size: 2rem;">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h5 class="fw-semibold mb-2">Crisis Text Line</h5>
+                    <p class="fs-5 fw-semibold mb-1" style="color: var(--primary);">Text HOME to 741741</p>
+                    <small style="color: var(--gray-600);">24/7 text support</small>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="text-center p-4" style="background: white; border-radius: var(--radius-xl); box-shadow: var(--shadow); border: 1px solid var(--gray-200);">
+                    <div class="mb-3" style="color: var(--accent); font-size: 2rem;">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h5 class="fw-semibold mb-2">Online Chat</h5>
+                    <a href="https://suicidepreventionlifeline.org/chat/" target="_blank" 
+                       class="fw-semibold text-decoration-none" style="color: var(--accent);">
+                        Crisis Chat →
+                    </a>
+                    <small class="d-block" style="color: var(--gray-600);">Web-based support</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}

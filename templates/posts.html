@@ -3,81 +3,296 @@
 {% block title %}Community Feed - TherapyHub{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-lg-8 mx-auto">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2><i class="fas fa-comments"></i> Community Feed</h2>
-            {% if current_user.is_authenticated %}
-            <a href="{{ url_for('create_post') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Share Your Feelings
-            </a>
-            {% else %}
-            <div>
-                <a href="{{ url_for('login') }}" class="btn btn-primary me-2">Login to Post</a>
-                <a href="{{ url_for('register') }}" class="btn btn-outline-primary">Register</a>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <!-- Page Header -->
+            <div class="d-flex justify-content-between align-items-center mb-5">
+                <div>
+                    <h1 class="display-6 fw-semibold text-gray-900 mb-2">
+                        Community Feed
+                    </h1>
+                    <p class="text-gray-600 fs-5 mb-0">Anonymous posts from our supportive community</p>
+                </div>
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('create_post') }}" class="cta-button primary">
+                    <i class="fas fa-pen me-2"></i>Share Your Feelings
+                </a>
+                {% else %}
+                <div class="d-flex gap-3">
+                    <a href="{{ url_for('login') }}" class="cta-button primary">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login to Post
+                    </a>
+                    <a href="{{ url_for('register') }}" class="cta-button secondary">
+                        <i class="fas fa-user-plus me-2"></i>Register
+                    </a>
+                </div>
+                {% endif %}
             </div>
-            {% endif %}
-        </div>
 
-        {% if posts %}
-        {% for post in posts %}
-        <div class="card post-card mb-4">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-start mb-2">
-                    <div>
-                        <h6 class="card-subtitle mb-2 text-muted">
-                            <i class="fas fa-user-circle"></i> {{ post.author.anonymous_name }}
-                        </h6>
+            <!-- Smart Emotion Filters -->
+            <div class="feature-card mb-5">
+                <div class="row align-items-center">
+                    <div class="col-md-4">
+                        <h5 class="fw-semibold text-gray-900 mb-2">
+                            <i class="fas fa-palette me-2 text-primary"></i>
+                            Filter by Emotion
+                        </h5>
+                        <p class="text-gray-600 mb-0 fs-sm">Find posts that resonate with you</p>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="d-flex flex-wrap gap-2 mt-3 mt-md-0">
+                            <a href="{{ url_for('posts') }}" class="filter-pill active">
+                                <i class="fas fa-globe me-2"></i>All Posts
+                            </a>
+                            <a href="{{ url_for('posts') }}?emotion=positive" class="filter-pill">
+                                <span class="me-2">😊</span>Positive
+                            </a>
+                            <a href="{{ url_for('posts') }}?emotion=sad" class="filter-pill">
+                                <span class="me-2">💙</span>Sad
+                            </a>
+                            <a href="{{ url_for('posts') }}?emotion=anxious" class="filter-pill">
+                                <span class="me-2">🫂</span>Anxious
+                            </a>
+                            <a href="{{ url_for('posts') }}?emotion=stressed" class="filter-pill">
+                                <span class="me-2">😮‍💨</span>Stressed
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Posts -->
+            {% if posts %}
+                {% for post in posts %}
+                <div class="feature-card mb-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="icon-circle bg-purple-100 text-purple-600 me-3">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-semibold text-gray-900 mb-1">{{ post.author.anonymous_name }}</h6>
+                                <p class="text-gray-500 mb-0 fs-sm">
+                                    <i class="fas fa-clock me-1"></i>
+                                    {{ post.created_at.strftime('%B %d, %Y at %I:%M %p') }}
+                                </p>
+                            </div>
+                        </div>
                         {% if post.emotion_category %}
-                        <span class="badge emotion-{{ post.emotion_category }} emotion-badge">
-                            {% if post.emotion_category == 'stressed' %}
-                            <i class="fas fa-exclamation-triangle"></i> Stressed
-                            {% elif post.emotion_category == 'anxious' %}
-                            <i class="fas fa-heart"></i> Anxious
+                        <span class="badge-pill emotion-{{ post.emotion_category }}">
+                            {% if post.emotion_category == 'positive' %}
+                                <i class="fas fa-smile me-1"></i>Positive
                             {% elif post.emotion_category == 'sad' %}
-                            <i class="fas fa-cloud-rain"></i> Sad
-                            {% elif post.emotion_category == 'positive' %}
-                            <i class="fas fa-smile"></i> Positive
+                                <i class="fas fa-cloud-rain me-1"></i>Sad
+                            {% elif post.emotion_category == 'anxious' %}
+                                <i class="fas fa-heart me-1"></i>Anxious
+                            {% elif post.emotion_category == 'stressed' %}
+                                <i class="fas fa-exclamation-triangle me-1"></i>Stressed
                             {% else %}
-                            <i class="fas fa-circle"></i> Neutral
+                                <i class="fas fa-circle me-1"></i>Neutral
                             {% endif %}
                         </span>
                         {% endif %}
                     </div>
-                    <small class="text-muted">{{ post.created_at.strftime('%B %d, %Y at %I:%M %p') }}</small>
-                </div>
-                
-                <p class="card-text">{{ post.content }}</p>
-                
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <span class="text-muted small">
-                            <i class="fas fa-reply"></i> {{ post.replies|length }} replies
-                        </span>
+                    
+                    <div class="mb-4">
+                        <p class="text-gray-800 fs-5 lh-lg mb-0">{{ post.content }}</p>
                     </div>
-                    <a href="{{ url_for('view_post', id=post.id) }}" class="btn btn-outline-primary btn-sm">
-                        <i class="fas fa-eye"></i> View & Reply
-                    </a>
+                    
+                    {% if post.coping_strategy %}
+                    <div class="p-4 bg-blue-50 rounded-3 border border-blue-100 mb-4">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="icon-circle bg-blue-100 text-blue-600">
+                                    <i class="fas fa-lightbulb"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h6 class="fw-semibold text-blue-900 mb-2">AI Suggested Coping Strategy</h6>
+                                <p class="text-blue-800 mb-0">{{ post.coping_strategy }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex gap-3">
+                            <a href="{{ url_for('view_post', id=post.id) }}" class="btn-clean">
+                                <i class="fas fa-eye me-2"></i>View & Reply
+                            </a>
+                            {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('view_post', id=post.id) }}#reply-form" class="btn-clean text-green-600">
+                                <i class="fas fa-reply me-2"></i>Support
+                            </a>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="text-gray-500 fs-sm">
+                            <i class="fas fa-reply me-1"></i>
+                            {{ post.replies|length }} replies
+                        </div>
+                    </div>
+                    
+                    {% if post.replies|length > 0 %}
+                    <div class="mt-4 pt-4 border-top border-gray-200">
+                        <p class="text-gray-600 fw-semibold mb-3 fs-sm">
+                            <i class="fas fa-comment me-1"></i>Latest Support:
+                        </p>
+                        {% set latest_reply = post.replies[-1] %}
+                        <div class="d-flex align-items-start">
+                            <div class="icon-circle bg-gray-100 text-gray-600 me-3" style="width: 2rem; height: 2rem;">
+                                <i class="fas fa-user fs-sm"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="fw-semibold text-gray-800 fs-sm">{{ latest_reply.author.anonymous_name }}</span>
+                                    <span class="text-gray-500 fs-xs">{{ latest_reply.created_at.strftime('%m/%d %I:%M %p') }}</span>
+                                </div>
+                                <p class="text-gray-600 mb-0 fs-sm">
+                                    {{ latest_reply.content[:100] }}{% if latest_reply.content|length > 100 %}...{% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            {% else %}
+                <!-- Motivational empty state -->
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="feature-card text-center py-5">
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-center gap-3 mb-4">
+                                    <div class="icon-circle bg-green-100 text-green-600">
+                                        <i class="fas fa-seedling"></i>
+                                    </div>
+                                    <div class="icon-circle bg-red-100 text-red-600">
+                                        <i class="fas fa-heart"></i>
+                                    </div>
+                                    <div class="icon-circle bg-blue-100 text-blue-600">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <h2 class="display-6 fw-semibold text-gray-900 mb-3">🌱 Your voice matters here</h2>
+                            <p class="fs-4 text-gray-600 mb-5">
+                                Every journey begins with a single step. <br>
+                                <strong>Be the first to share and help someone feel less alone.</strong>
+                            </p>
+                            
+                            <div class="row g-4 mb-5">
+                                <div class="col-md-4">
+                                    <div class="text-center p-4">
+                                        <div class="icon-circle bg-purple-100 text-purple-600 mx-auto mb-3">
+                                            <i class="fas fa-hand-holding-heart"></i>
+                                        </div>
+                                        <h6 class="fw-semibold text-gray-900 mb-2">Your story</h6>
+                                        <p class="text-gray-600 mb-0 fs-sm">could be someone's hope</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="text-center p-4">
+                                        <div class="icon-circle bg-yellow-100 text-yellow-600 mx-auto mb-3">
+                                            <i class="fas fa-lightbulb"></i>
+                                        </div>
+                                        <h6 class="fw-semibold text-gray-900 mb-2">Share feelings</h6>
+                                        <p class="text-gray-600 mb-0 fs-sm">get AI coping strategies</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="text-center p-4">
+                                        <div class="icon-circle bg-green-100 text-green-600 mx-auto mb-3">
+                                            <i class="fas fa-shield-alt"></i>
+                                        </div>
+                                        <h6 class="fw-semibold text-gray-900 mb-2">Safe space</h6>
+                                        <p class="text-gray-600 mb-0 fs-sm">moderated by AI</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% if current_user.is_authenticated %}
+                            <div class="d-grid gap-3 d-md-block">
+                                <a href="{{ url_for('create_post') }}" class="cta-button primary large">
+                                    <i class="fas fa-heart me-2"></i>Share Your First Post
+                                </a>
+                                <p class="mt-3 text-gray-500 fs-sm">
+                                    <i class="fas fa-users me-1"></i>
+                                    Join thousands who found support through sharing
+                                </p>
+                            </div>
+                            {% else %}
+                            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                                <a href="{{ url_for('register') }}" class="cta-button primary large">
+                                    <i class="fas fa-user-plus me-2"></i>Join Our Community
+                                </a>
+                                <a href="{{ url_for('login') }}" class="cta-button secondary large">
+                                    <i class="fas fa-sign-in-alt me-2"></i>I Have Account
+                                </a>
+                            </div>
+                            <p class="mt-3 text-gray-500 fs-sm">
+                                <i class="fas fa-lock me-1"></i>
+                                100% anonymous • No personal info required
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Community inspiration quotes -->
+                <div class="row g-4 mt-4">
+                    <div class="col-md-6">
+                        <div class="feature-card text-center">
+                            <i class="fas fa-quote-left text-gray-400 mb-3 fa-2x"></i>
+                            <p class="fs-5 text-gray-800 mb-3 fst-italic">"The bravest thing you can do is ask for help."</p>
+                            <p class="text-gray-500 mb-0 fs-sm">— Community Member</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="feature-card text-center">
+                            <i class="fas fa-quote-left text-gray-400 mb-3 fa-2x"></i>
+                            <p class="fs-5 text-gray-800 mb-3 fst-italic">"You're not alone in this journey."</p>
+                            <p class="text-gray-500 mb-0 fs-sm">— TherapyHub Community</p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Quick Stats -->
+            {% if posts %}
+            <div class="row g-4 mt-5">
+                <div class="col-md-3">
+                    <div class="feature-card text-center">
+                        <div class="display-4 fw-bold text-primary mb-2">{{ posts|length }}</div>
+                        <h6 class="fw-semibold text-gray-900 mb-1">Posts Today</h6>
+                        <p class="text-gray-600 mb-0 fs-sm">Community Activity</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-card text-center">
+                        <div class="display-4 fw-bold text-primary mb-2">{{ posts|sum(attribute='replies')|length }}</div>
+                        <h6 class="fw-semibold text-gray-900 mb-1">Total Replies</h6>
+                        <p class="text-gray-600 mb-0 fs-sm">Support Messages</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-card text-center">
+                        <div class="display-4 text-primary mb-2"><i class="fas fa-users"></i></div>
+                        <h6 class="fw-semibold text-gray-900 mb-1">Active Community</h6>
+                        <p class="text-gray-600 mb-0 fs-sm">Helping Each Other</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-card text-center">
+                        <div class="display-4 text-danger mb-2"><i class="fas fa-heart"></i></div>
+                        <h6 class="fw-semibold text-gray-900 mb-1">Safe Space</h6>
+                        <p class="text-gray-600 mb-0 fs-sm">AI Moderated</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        {% endfor %}
-        {% else %}
-        <div class="text-center py-5">
-            <i class="fas fa-comments fa-3x text-muted mb-3"></i>
-            <h4 class="text-muted">No posts yet</h4>
-            <p class="text-muted">Be the first to share your feelings with the community!</p>
-            {% if current_user.is_authenticated %}
-            <a href="{{ url_for('create_post') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Create First Post
-            </a>
-            {% else %}
-            <a href="{{ url_for('register') }}" class="btn btn-primary">
-                <i class="fas fa-user-plus"></i> Join to Post
-            </a>
             {% endif %}
         </div>
-        {% endif %}
     </div>
 </div>
 {% endblock %}

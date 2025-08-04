@@ -3,78 +3,126 @@
 {% block title %}Reply with Support - TherapyHub{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <!-- Original Post Reference -->
-        <div class="card mb-4">
-            <div class="card-header bg-light">
-                <h6 class="mb-0">Replying to:</h6>
-            </div>
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-start mb-2">
-                    <h6 class="card-subtitle text-muted">
-                        <i class="fas fa-user-circle"></i> {{ post.author.anonymous_name }}
-                    </h6>
-                    <small class="text-muted">{{ post.created_at.strftime('%B %d, %Y') }}</small>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Original Post Reference -->
+            <div class="feature-card mb-5">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="icon-circle bg-blue-100 text-blue-600 me-3">
+                        <i class="fas fa-quote-left"></i>
+                    </div>
+                    <h6 class="fw-semibold text-gray-900 mb-0">Replying to:</h6>
                 </div>
-                <p class="card-text">{{ post.content[:200] }}{% if post.content|length > 200 %}...{% endif %}</p>
+                
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-circle bg-purple-100 text-purple-600 me-3">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-semibold text-gray-800 mb-1">{{ post.author.anonymous_name }}</h6>
+                            <p class="text-gray-500 mb-0 fs-sm">{{ post.created_at.strftime('%B %d, %Y') }}</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-gray-700 fs-5 lh-lg mb-0">{{ post.content[:200] }}{% if post.content|length > 200 %}...{% endif %}</p>
             </div>
-        </div>
 
-        <!-- Reply Form -->
-        <div class="card">
-            <div class="card-header bg-success text-white">
-                <h4 class="mb-0"><i class="fas fa-heart"></i> Share Your Support</h4>
-            </div>
-            <div class="card-body">
-                <p class="text-muted">Your supportive words can make a real difference. Be kind, empathetic, and encouraging.</p>
+            <!-- Reply Form -->
+            <div class="feature-card mb-5">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="icon-circle bg-green-100 text-green-600 me-3">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h4 class="fw-semibold text-gray-900 mb-0">Share Your Support</h4>
+                </div>
+                
+                <p class="text-gray-600 mb-4">Your supportive words can make a real difference. Be kind, empathetic, and encouraging.</p>
                 
                 <form method="POST">
                     {{ form.hidden_tag() }}
                     
-                    <div class="mb-3">
-                        {{ form.reply_text.label(class="form-label") }}
-                        {{ form.reply_text(class="form-control") }}
+                    <div class="mb-5">
+                        {{ form.reply_text.label(class="form-label fw-semibold text-gray-800 mb-3") }}
+                        {{ form.reply_text(class="apple-input", rows="5", placeholder="Share your supportive message...", style="min-height: 120px;") }}
                         {% if form.reply_text.errors %}
-                        <div class="text-danger">
+                        <div class="text-danger mt-2">
                             {% for error in form.reply_text.errors %}
-                            <small>{{ error }}</small>
+                            <small class="d-flex align-items-center">
+                                <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
+                            </small>
                             {% endfor %}
                         </div>
                         {% endif %}
-                        <small class="form-text text-muted">Be supportive, understanding, and encouraging. Avoid giving professional advice.</small>
+                        <p class="text-gray-500 mt-3 fs-sm">Be supportive, understanding, and encouraging. Avoid giving professional advice.</p>
                     </div>
 
-                    <div class="d-flex justify-content-between">
-                        <a href="{{ url_for('view_post', id=post.id) }}" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left"></i> Back to Post
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{{ url_for('view_post', id=post.id) }}" class="btn-clean">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Post
                         </a>
-                        {{ form.submit(class="btn btn-success") }}
+                        {{ form.submit(class="cta-button primary") }}
                     </div>
                 </form>
             </div>
-        </div>
 
-        <div class="alert alert-warning mt-3" role="alert">
-            <h6 class="alert-heading"><i class="fas fa-shield-alt"></i> Content Guidelines</h6>
-            <ul class="mb-0">
-                <li>Be kind, supportive, and non-judgmental</li>
-                <li>Share encouragement and understanding</li>
-                <li>Avoid harmful, toxic, or abusive language</li>
-                <li>Don't provide professional medical advice</li>
-                <li>Replies with inappropriate content will be flagged for review</li>
-            </ul>
-        </div>
+            <!-- Content Guidelines -->
+            <div class="p-4 bg-yellow-50 rounded-3 border border-yellow-200 mb-4">
+                <div class="d-flex align-items-start">
+                    <div class="flex-shrink-0 me-3">
+                        <div class="icon-circle bg-yellow-100 text-yellow-600">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h6 class="fw-semibold text-yellow-900 mb-3">Content Guidelines</h6>
+                        <ul class="text-yellow-800 mb-0 space-y-1">
+                            <li class="mb-2">Be kind, supportive, and non-judgmental</li>
+                            <li class="mb-2">Share encouragement and understanding</li>
+                            <li class="mb-2">Avoid harmful, toxic, or abusive language</li>
+                            <li class="mb-2">Don't provide professional medical advice</li>
+                            <li class="mb-0">Replies with inappropriate content will be flagged for review</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
 
-        <div class="alert alert-info mt-3" role="alert">
-            <h6 class="alert-heading"><i class="fas fa-lightbulb"></i> How to Be Supportive</h6>
-            <ul class="mb-0">
-                <li>"I hear you and your feelings are valid"</li>
-                <li>"You're not alone in feeling this way"</li>
-                <li>"Thank you for sharing - that takes courage"</li>
-                <li>"I've felt similar and here's what helped me..."</li>
-                <li>"Sending you support and positive thoughts"</li>
-            </ul>
+            <!-- How to Be Supportive -->
+            <div class="p-4 bg-blue-50 rounded-3 border border-blue-100">
+                <div class="d-flex align-items-start">
+                    <div class="flex-shrink-0 me-3">
+                        <div class="icon-circle bg-blue-100 text-blue-600">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h6 class="fw-semibold text-blue-900 mb-3">How to Be Supportive</h6>
+                        <div class="text-blue-800 space-y-2">
+                            <div class="d-flex align-items-start mb-2">
+                                <i class="fas fa-quote-left text-blue-600 me-2 mt-1 fs-sm"></i>
+                                <span>"I hear you and your feelings are valid"</span>
+                            </div>
+                            <div class="d-flex align-items-start mb-2">
+                                <i class="fas fa-quote-left text-blue-600 me-2 mt-1 fs-sm"></i>
+                                <span>"You're not alone in feeling this way"</span>
+                            </div>
+                            <div class="d-flex align-items-start mb-2">
+                                <i class="fas fa-quote-left text-blue-600 me-2 mt-1 fs-sm"></i>
+                                <span>"Thank you for sharing - that takes courage"</span>
+                            </div>
+                            <div class="d-flex align-items-start mb-2">
+                                <i class="fas fa-quote-left text-blue-600 me-2 mt-1 fs-sm"></i>
+                                <span>"I've felt similar and here's what helped me..."</span>
+                            </div>
+                            <div class="d-flex align-items-start mb-0">
+                                <i class="fas fa-quote-left text-blue-600 me-2 mt-1 fs-sm"></i>
+                                <span>"Sending you support and positive thoughts"</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

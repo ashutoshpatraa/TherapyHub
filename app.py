@@ -1,3 +1,24 @@
+#!/usr/bin/env python3
+"""
+TherapyHub - Anonymous Peer Support Platform
+
+🚀 ULTRA-SIMPLE SETUP: Just run this file!
+   python app.py
+
+✅ Everything included:
+   - Flask web application
+   - SQLite database (auto-created)
+   - Sentiment analysis (TextBlob + NLTK)
+   - User authentication & admin panel
+   - Content moderation & safety features
+   - Bootstrap UI templates
+
+🌐 Access: http://localhost:5000
+👤 Admin: username=admin, password=admin123
+
+No configuration files, no database setup, no batch scripts needed!
+"""
+
 import os
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
