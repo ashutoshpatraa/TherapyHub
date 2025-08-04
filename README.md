@@ -16,7 +16,7 @@ TherapyHub is a Flask-based web application that provides a safe, anonymous spac
 
 ### Technical Features
 - **Backend**: Python Flask with SQLAlchemy ORM
-- **Database**: MySQL with PyMySQL connector
+- **Database**: SQLite (no setup required)
 - **NLP**: TextBlob for sentiment analysis and emotion categorization
 - **Frontend**: Bootstrap 5 responsive design
 - **Security**: Password hashing with Werkzeug
@@ -26,7 +26,6 @@ TherapyHub is a Flask-based web application that provides a safe, anonymous spac
 
 ### Prerequisites
 - Python 3.8+
-- MySQL Server
 - pip (Python package manager)
 
 ### 1. Clone Repository
@@ -47,26 +46,16 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-### 3. Database Setup
-1. **Start MySQL Server**
-2. **Create Database** (Optional - can be done automatically):
-   ```sql
-   CREATE DATABASE therapyhub;
-   ```
-3. **Update Database Configuration** in `app.py`:
-   ```python
-   app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://username:password@localhost/therapyhub'
-   ```
-
-### 4. Initialize NLTK Data
+### 3. Run Application
 ```powershell
-python setup_nltk.py
+python app.py
 ```
 
-### 5. Run Application
-```powershell
-python run.py
-```
+**That's it!** The application will:
+- Automatically create the SQLite database
+- Download required NLTK data
+- Create the admin user
+- Start the web server
 
 The application will be available at: `http://localhost:5000`
 
@@ -74,7 +63,7 @@ The application will be available at: `http://localhost:5000`
 
 ### Users Table
 ```sql
-- id (INT, PRIMARY KEY)
+- id (INTEGER, PRIMARY KEY)
 - username (VARCHAR(80), UNIQUE)
 - anonymous_name (VARCHAR(80))
 - password_hash (VARCHAR(255))
@@ -83,21 +72,21 @@ The application will be available at: `http://localhost:5000`
 
 ### Posts Table
 ```sql
-- id (INT, PRIMARY KEY)
-- user_id (INT, FOREIGN KEY)
+- id (INTEGER, PRIMARY KEY)
+- user_id (INTEGER, FOREIGN KEY)
 - content (TEXT)
-- sentiment_score (FLOAT)
+- sentiment_score (REAL)
 - emotion_category (VARCHAR(50))
 - created_at (TIMESTAMP)
 ```
 
 ### Replies Table
 ```sql
-- id (INT, PRIMARY KEY)
-- post_id (INT, FOREIGN KEY)
-- user_id (INT, FOREIGN KEY)
+- id (INTEGER, PRIMARY KEY)
+- post_id (INTEGER, FOREIGN KEY)
+- user_id (INTEGER, FOREIGN KEY)
 - reply_text (TEXT)
-- sentiment_score (FLOAT)
+- sentiment_score (REAL)
 - flagged (BOOLEAN)
 - created_at (TIMESTAMP)
 ```
@@ -147,12 +136,40 @@ Personalized suggestions based on detected emotions:
 
 *⚠️ Change admin credentials in production!*
 
+## 🚀 Quick Start
+
+**Super Simple - Just Run One Command:**
+```bash
+python app.py
+```
+
+**That's it!** The application automatically:
+- Creates SQLite database (`therapyhub.db`)
+- Downloads NLTK data if needed
+- Creates admin user
+- Starts web server at `http://localhost:5000`
+
+**First Time Setup:**
+```bash
+# 1. Install Python 3.8+
+# 2. Clone repository
+# 3. Create virtual environment
+python -m venv .venv
+.venv\Scripts\activate  # Windows
+
+# 4. Install requirements
+pip install -r requirements.txt
+
+# 5. Run application
+python app.py
+```
+
 ## 🔧 Configuration
 
 ### Environment Variables (.env)
 ```env
 SECRET_KEY=your-secret-key-change-this-in-production
-DATABASE_URL=mysql+pymysql://root:password@localhost/therapyhub
+DATABASE_URL=sqlite:///therapyhub.db
 FLASK_ENV=development
 FLASK_DEBUG=True
 ```
@@ -187,12 +204,12 @@ TOXIC_KEYWORDS = [
 ### Project Structure
 ```
 TherapyHub/
-├── app.py                 # Main Flask application
-├── run.py                 # Startup script
+├── app.py                 # Main Flask application (run this!)
 ├── requirements.txt       # Python dependencies
-├── setup_nltk.py         # NLTK data downloader
-├── database_setup.sql    # MySQL schema
+├── setup_nltk.py         # NLTK data setup (optional)
+├── setup.bat             # Windows startup script
 ├── .env                  # Environment variables
+├── therapyhub.db         # SQLite database (created automatically)
 └── templates/            # HTML templates
     ├── base.html
     ├── home.html

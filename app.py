@@ -12,7 +12,7 @@ import re
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key-here'  # Change this in production
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@localhost/therapyhub'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///therapyhub.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -288,7 +288,60 @@ def delete_reply(reply_id):
     flash('Reply deleted!')
     return redirect(url_for('admin_flagged'))
 
+def create_admin_user():
+    """Create admin user if it doesn't exist"""
+    admin = User.query.filter_by(username='admin').first()
+    if not admin:
+        admin_user = User(
+            username='admin',
+            anonymous_name='TherapyHub Admin',
+            password_hash=generate_password_hash('admin123')
+        )
+        db.session.add(admin_user)
+        db.session.commit()
+        print("Admin user created successfully!")
+        print("Username: admin")
+        print("Password: admin123")
+    else:
+        print("Admin user already exists.")
+
+def initialize_app():
+    """Initialize the application and database"""
+    try:
+        # Download NLTK data if needed
+        import nltk
+        try:
+            nltk.data.find('tokenizers/punkt')
+        except LookupError:
+            print("Downloading NLTK data...")
+            nltk.download('punkt')
+            nltk.download('brown')
+            print("NLTK data downloaded successfully!")
+        
+        # Create database tables
+        with app.app_context():
+            db.create_all()
+            print("Database tables created successfully!")
+            create_admin_user()
+            
+    except Exception as e:
+        print(f"Error initializing application: {e}")
+        return False
+    return True
+
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-    app.run(debug=True)
+    print("=" * 50)
+    print("TherapyHub - Anonymous Peer Support Platform")
+    print("=" * 50)
+    
+    # Initialize application
+    if initialize_app():
+        print("\nStarting TherapyHub...")
+        print("Access the application at: http://localhost:5000")
+        print("Admin panel: http://localhost:5000/admin/flagged")
+        print("Press Ctrl+C to stop the server")
+        print("=" * 50)
+        app.run(debug=True, host='0.0.0.0', port=5000)
+    else:
+        print("Failed to initialize application.")
+        exit(1)
