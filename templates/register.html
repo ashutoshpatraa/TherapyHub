@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Register - TherapyHub{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-user-plus"></i> Join TherapyHub</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        {{ form.username.label(class="form-label") }}
+                        {{ form.username(class="form-control") }}
+                        {% if form.username.errors %}
+                        <div class="text-danger">
+                            {% for error in form.username.errors %}
+                            <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <small class="form-text text-muted">This will be used for login (not visible to others).</small>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.anonymous_name.label(class="form-label") }}
+                        {{ form.anonymous_name(class="form-control") }}
+                        {% if form.anonymous_name.errors %}
+                        <div class="text-danger">
+                            {% for error in form.anonymous_name.errors %}
+                            <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <small class="form-text text-muted">This name will be shown with your posts and replies.</small>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.password.label(class="form-label") }}
+                        {{ form.password(class="form-control") }}
+                        {% if form.password.errors %}
+                        <div class="text-danger">
+                            {% for error in form.password.errors %}
+                            <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+
+                <hr>
+                <div class="text-center">
+                    <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="alert alert-info mt-3" role="alert">
+            <h6 class="alert-heading"><i class="fas fa-shield-alt"></i> Privacy & Safety</h6>
+            <ul class="mb-0">
+                <li>Your real identity remains private</li>
+                <li>Only your anonymous name is visible to others</li>
+                <li>All content is monitored for safety</li>
+                <li>Toxic content is automatically flagged</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
