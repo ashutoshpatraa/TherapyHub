@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Post Details - TherapyHub{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="mb-3">
+            <a href="{{ url_for('posts') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Feed
+            </a>
+        </div>
+
+        <!-- Original Post -->
+        <div class="card post-card mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                        <h5 class="card-title">
+                            <i class="fas fa-user-circle"></i> {{ post.author.anonymous_name }}
+                        </h5>
+                        {% if post.emotion_category %}
+                        <span class="badge emotion-{{ post.emotion_category }} emotion-badge">
+                            {% if post.emotion_category == 'stressed' %}
+                            <i class="fas fa-exclamation-triangle"></i> Stressed
+                            {% elif post.emotion_category == 'anxious' %}
+                            <i class="fas fa-heart"></i> Anxious
+                            {% elif post.emotion_category == 'sad' %}
+                            <i class="fas fa-cloud-rain"></i> Sad
+                            {% elif post.emotion_category == 'positive' %}
+                            <i class="fas fa-smile"></i> Positive
+                            {% else %}
+                            <i class="fas fa-circle"></i> Neutral
+                            {% endif %}
+                        </span>
+                        {% endif %}
+                    </div>
+                    <small class="text-muted">{{ post.created_at.strftime('%B %d, %Y at %I:%M %p') }}</small>
+                </div>
+                
+                <p class="card-text">{{ post.content }}</p>
+                
+                {% if current_user.is_authenticated %}
+                <div class="mt-3">
+                    <a href="{{ url_for('reply_to_post', post_id=post.id) }}" class="btn btn-primary">
+                        <i class="fas fa-reply"></i> Reply with Support
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Calming Resources -->
+        {% if resources %}
+        <div class="calming-resources mb-4">
+            <h5><i class="fas fa-lightbulb"></i> Helpful Resources</h5>
+            <p>Based on your post, here are some techniques that might help:</p>
+            <ul>
+                {% for resource in resources %}
+                <li>{{ resource }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <!-- Replies Section -->
+        <div class="mb-4">
+            <h4><i class="fas fa-comments"></i> Supportive Replies ({{ replies|length }})</h4>
+            
+            {% if not current_user.is_authenticated %}
+            <div class="alert alert-info" role="alert">
+                <i class="fas fa-info-circle"></i> 
+                <a href="{{ url_for('login') }}">Login</a> or 
+                <a href="{{ url_for('register') }}">register</a> to reply and offer support.
+            </div>
+            {% endif %}
+        </div>
+
+        {% if replies %}
+        {% for reply in replies %}
+        <div class="card reply-card mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h6 class="card-subtitle text-muted">
+                        <i class="fas fa-user-circle"></i> {{ reply.author.anonymous_name }}
+                    </h6>
+                    <small class="text-muted">{{ reply.created_at.strftime('%B %d, %Y at %I:%M %p') }}</small>
+                </div>
+                <p class="card-text">{{ reply.reply_text }}</p>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="text-center py-4">
+            <i class="fas fa-heart fa-2x text-muted mb-3"></i>
+            <p class="text-muted">No replies yet. Be the first to offer support!</p>
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('reply_to_post', post_id=post.id) }}" class="btn btn-primary">
+                <i class="fas fa-reply"></i> Write a Supportive Reply
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
